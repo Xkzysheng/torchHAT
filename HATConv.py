@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class HyperbolicGraphAttentionLayer(nn.Module):
-    def __init__(self, in_features, out_features, n_nodes, concat=True):
+    def __init__(self, in_features, out_features, n_nodes, ini_c, next_c, concat=True):
         super(HyperbolicGraphAttentionLayer, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -15,8 +15,8 @@ class HyperbolicGraphAttentionLayer(nn.Module):
         # 
         self.W = nn.Parameter(torch.empty(size=(in_features, out_features)))
         nn.init.xavier_uniform_(self.W.data, gain=1.414)
-        # c初始值设为1
-        self.c = nn.Parameter(torch.tensor([1.0]))
+        self.c = ini_c
+        self.next_c = next_c
 
     def f2p_exp_projection(self, f):
         # f表示欧氏空间的原始特征矩阵
@@ -84,7 +84,7 @@ class HyperbolicGraphAttentionLayer(nn.Module):
         return h
 
     def exp_projection(self, h):
-        c = self.c
+        c = self.next_c
         h = h + self.EPS
         sqrt_c = torch.sqrt(c)
         h_norm_raw = torch.norm(h, p=2, dim=1, keepdim=True)  # 计算各行（每一个节点的特征向量）的l2范数
