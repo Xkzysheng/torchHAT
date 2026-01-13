@@ -2,11 +2,15 @@
 PyTorch version of HAT (the original one is based on tensorflow).
 
 
-2026/1/13 update
+2026/1/13 update:
+
+
 Add sparse version of HAT, add other chores.
 
 
-Original description
+Original description:
+
+
 Dense version
 
 Support multi-head attention now! (in HATLayer&model.py)
